@@ -194,6 +194,22 @@ textarea.input { resize: vertical; }
 .bigscreen-hint { font-size: 30px; color: var(--gold); margin: 4px 0; }
 .bigscreen-ctrls { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .bigscreen-count { font-size: 15px; opacity: .6; }
+.bigscreen-bar { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; align-items: center; font-size: 15px; }
+.bigscreen-field { display: inline-flex; align-items: center; gap: 6px; opacity: .92; }
+.bigscreen-field select {
+  background: rgba(0, 0, 0, .35); color: #fff7e6; border: 1px solid rgba(240, 180, 41, .55);
+  border-radius: 8px; padding: 6px 10px; font-size: 15px; font-family: inherit;
+}
+.bigscreen-field select:focus { outline: 2px solid var(--gold); }
+.bigscreen-field select option { color: var(--ink); }
+.bigscreen-check { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; opacity: .92; }
+.bigscreen-check input { width: 17px; height: 17px; accent-color: var(--gold); }
+.bigscreen-solved {
+  background: var(--gold); color: #5c1219; font-size: 22px; font-weight: 700;
+  padding: 4px 16px; border-radius: 999px;
+}
+.bigscreen-empty { font-size: 32px; opacity: .85; max-width: 84%; line-height: 1.6; }
+.bigscreen-done { font-size: 24px; color: var(--gold); margin: 0; font-weight: 600; }
 
 /* ---- 谜格说明 ---- */
 .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }

@@ -126,6 +126,66 @@ test.describe('元宵灯谜库 E2E', () => {
     await expect(page.locator('.bigscreen')).toHaveCount(0);
   });
 
+  test('大屏模式：已猜中默认跳过，取消后标题标出', async ({ page }) => {
+    await importSample(page);
+    await page.click('nav >> text=现场登记');
+    // 登记谜号 1 为已猜中
+    await page.fill('.onsite-no', '1');
+    await page.click('button:has-text("查找")');
+    await page.click('button:has-text("✓ 登记猜中")');
+    await expect(page.locator('.msg-ok')).toContainText('已登记');
+
+    await page.click('button:has-text("大屏模式")');
+    // 默认跳过已猜中：1 号被跳过，首先放映 2 号，批次为 52 条
+    await expect(page.locator('.bigscreen-surface')).toContainText('两人土上蹲');
+    await expect(page.locator('.bigscreen-count')).toContainText('1 / 52');
+    // 取消「跳过已猜中」：1 号回到批次并在标题标出「已猜中」
+    await page.uncheck('.bigscreen-check input');
+    await expect(page.locator('.bigscreen-surface')).toContainText('一口咬掉牛尾巴');
+    await expect(page.locator('.bigscreen-solved')).toContainText('已猜中');
+    // 按谜目筛选：猜成语 12 条
+    await page.selectOption('.bigscreen-bar select >> nth=0', 'idiom');
+    await expect(page.locator('.bigscreen-count')).toContainText('/ 12');
+    // 换按标签筛选：儿童专区 7 条
+    await page.selectOption('.bigscreen-bar select >> nth=0', '');
+    await page.selectOption('.bigscreen-bar select >> nth=2', '儿童专区');
+    await expect(page.locator('.bigscreen-count')).toContainText('/ 7');
+    await page.click('button:has-text("退出大屏")');
+    await expect(page.locator('.bigscreen')).toHaveCount(0);
+  });
+
+  test('大屏模式：随机抽取不重复、抽完提示、换批与退出重置', async ({ page }) => {
+    await importSample(page);
+    await page.click('nav >> text=现场登记');
+    await page.click('button:has-text("大屏模式")');
+    // 挑「生僻字示例」标签（2 条）并切到随机抽取
+    await page.selectOption('.bigscreen-bar select >> nth=2', '生僻字示例');
+    await page.selectOption('.bigscreen-bar select >> nth=3', 'random');
+    await expect(page.locator('.bigscreen-empty')).toContainText('随机抽取');
+    // 抽两条：互不相同，本轮不再重复
+    const seen: string[] = [];
+    await page.click('button:has-text("🎲 随机抽取")');
+    await expect(page.locator('.bigscreen-count')).toContainText('已抽 1 / 共 2 条');
+    seen.push(await page.locator('.bigscreen-no').innerText());
+    await page.click('button:has-text("🎲 随机抽取")');
+    await expect(page.locator('.bigscreen-count')).toContainText('已抽 2 / 共 2 条');
+    seen.push(await page.locator('.bigscreen-no').innerText());
+    expect(new Set(seen).size).toBe(2);
+    // 抽完：按钮禁用并给出提示
+    await expect(page.locator('button:has-text("🎲 随机抽取")')).toBeDisabled();
+    await expect(page.locator('.bigscreen-done')).toContainText('已全部抽完');
+    // 换一批：已抽记录清零
+    await page.selectOption('.bigscreen-bar select >> nth=2', '多音字示例');
+    await expect(page.locator('.bigscreen-count')).toContainText('已抽 0 / 共 1 条');
+    await expect(page.locator('button:has-text("🎲 随机抽取")')).toBeEnabled();
+    // 退出后重新进入：筛选与进度全部复位，从头开始
+    await page.click('button:has-text("退出大屏")');
+    await page.click('button:has-text("大屏模式")');
+    await expect(page.locator('.bigscreen-surface')).toContainText('一口咬掉牛尾巴');
+    await expect(page.locator('.bigscreen-count')).toContainText('1 / 53');
+    await page.click('button:has-text("退出大屏")');
+  });
+
   test('兑奖号码生成', async ({ page }) => {
     await importSample(page);
     await page.click('nav >> text=现场登记');
