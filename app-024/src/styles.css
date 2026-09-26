@@ -194,6 +194,28 @@ textarea.input { resize: vertical; }
 .bigscreen-hint { font-size: 30px; color: var(--gold); margin: 4px 0; }
 .bigscreen-ctrls { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .bigscreen-count { font-size: 15px; opacity: .6; }
+.bigscreen-solved {
+  align-self: center; font-size: 22px; font-weight: 700; color: #4a3200;
+  background: var(--gold); border: 2px solid #fff2c2; border-radius: 999px;
+  padding: 3px 18px; letter-spacing: 2px;
+}
+.bigscreen-exhausted { font-size: 30px; font-weight: 700; color: var(--gold); margin: 0; }
+
+/* 大屏 · 本批挑选设置卡 */
+.bigscreen-setup-card {
+  background: var(--card-bg); color: var(--ink);
+  border-radius: 14px; border: 2px solid var(--gold);
+  padding: 26px 30px; width: min(720px, 94vw); text-align: left;
+  box-shadow: 0 10px 50px rgba(0,0,0,.45);
+}
+.bigscreen-setup-card h2 { margin: 0 0 16px; font-size: 22px; color: var(--red); }
+.bs-setup-row { display: flex; gap: 14px; flex-wrap: wrap; }
+.bs-setup-row .field { min-width: 170px; }
+.bs-mode { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin: 6px 0 10px; font-size: 15px; }
+.bs-mode > span { color: var(--muted); }
+.bs-include { margin-bottom: 12px; font-size: 14.5px; }
+.bs-setup-summary { font-size: 14px; margin: 4px 0 16px; }
+.bs-setup-summary b { color: var(--ink); }
 
 /* ---- 谜格说明 ---- */
 .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
